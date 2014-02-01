@@ -1,5 +1,7 @@
 #include "file.h"
 
+#include "exceptions.h"
+
 namespace TestStorage {
 
 File::File(const std::string& path):
@@ -34,7 +36,7 @@ void File::resize(off_t size) {
 }
 
 BinaryMapping::Buffer File::read(off_t offset, size_t size) {
-	void* buffer;
+	void* buffer = nullptr;
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,

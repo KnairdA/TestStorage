@@ -16,4 +16,5 @@ add_executable(
 	test
 	test.cc
 	src/io/file.cc
+	src/io/mmap.cc
 )

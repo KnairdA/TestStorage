@@ -6,32 +6,25 @@
 #include <unistd.h>
 
 #include <string>
-#include <exception>
 
 #include "BinaryMapping/src/io/buffer.h"
 
 namespace TestStorage {
-
-class io_exception : public std::exception {
-	virtual const char* what() const throw() {
-		return "io";
-	}
-};
 
 class File {
 	public:
 		File(const std::string&);
 		~File();
 
-		inline operator int();
+		operator int();
 
-		inline off_t size();
-		inline void resize(off_t);
+		off_t size();
+		void resize(off_t);
 
-		inline BinaryMapping::Buffer read(off_t, size_t);
-		inline void write(off_t, const BinaryMapping::Buffer&);
+		BinaryMapping::Buffer read(off_t, size_t);
+		void write(off_t, const BinaryMapping::Buffer&);
 
-		inline void grow(size_t);
+		void grow(size_t);
 
 	private:
 		static const int OpenFlags   = O_RDWR  | O_CREAT;
