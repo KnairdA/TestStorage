@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "BinaryMapping/src/io/buffer.h"
+#include "buffer_guard.h"
 
 namespace TestStorage {
 
@@ -21,8 +21,8 @@ class File {
 		off_t size();
 		void resize(off_t);
 
-		BinaryMapping::Buffer read(off_t, size_t);
-		void write(off_t, const BinaryMapping::Buffer&);
+		BufferGuard read(off_t, size_t);
+		void write(off_t, const BufferGuard::buffer_pair&);
 
 		void grow(size_t);
 

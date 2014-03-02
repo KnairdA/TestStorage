@@ -35,26 +35,27 @@ void File::resize(off_t size) {
 	}
 }
 
-BinaryMapping::Buffer File::read(off_t offset, size_t size) {
+BufferGuard File::read(off_t offset, size_t size) {
 	void* buffer = nullptr;
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,
 	                              size,
 	                              offset) >= 0 ) {
-		return BinaryMapping::Buffer(
+		return BufferGuard(
 			reinterpret_cast<uint8_t*>(buffer),
-			readSize
+			readSize,
+			true
 		);
 	} else {
 		throw io_exception(); 
 	}
 }
 
-void File::write(off_t offset, const BinaryMapping::Buffer& data) {
+void File::write(off_t offset, const BufferGuard::buffer_pair& data) {
 	if ( pwrite(this->descriptor_,
-	            reinterpret_cast<const void*>(data.front()),
-	            data.size(),
+	            reinterpret_cast<const void*>(data.first),
+	            data.second,
 	            offset) < 0 ) {
 		throw io_exception();
 	}

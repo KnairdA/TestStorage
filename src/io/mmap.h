@@ -5,16 +5,16 @@
 
 #include <cstdint>
 
-namespace TestStorage {
+#include "file.h"
 
-class File;
+namespace TestStorage {
 
 class MMap {
 	public:
 		MMap(File*);
 		~MMap();
 
-		inline uint8_t* get() const;
+		uint8_t* get() const;
 
 	private:
 		static const int ProtFlags = PROT_READ | PROT_WRITE;
