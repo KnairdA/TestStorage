@@ -23,8 +23,11 @@ MMap::~MMap() {
 	munmap(this->data_, this->file_->size());
 }
 
-uint8_t* MMap::get() const {
-	return reinterpret_cast<uint8_t*>(this->data_);
+BufferGuard<uint8_t> MMap::data() {
+	return BufferGuard<uint8_t>(
+		reinterpret_cast<uint8_t*>(this->data_),
+		this->file_->size()
+	);
 }
 
 }

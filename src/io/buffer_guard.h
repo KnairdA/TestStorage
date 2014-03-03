@@ -6,11 +6,12 @@
 
 namespace TestStorage {
 
+template <typename Type>
 class BufferGuard {
 	public:
-		typedef std::pair<uint8_t*const, const size_t> buffer_pair;
+		typedef std::pair<Type*const, const size_t> buffer_pair;
 
-		BufferGuard(uint8_t*const d, size_t s, bool o = false):
+		BufferGuard(Type*const d, size_t s, bool o = false):
 			data(d),
 			size(s),
 			owner(o) { }
@@ -19,8 +20,8 @@ class BufferGuard {
 			BufferGuard(pair.first, pair.second) { }
 
 		explicit BufferGuard(size_t s):
-			data(reinterpret_cast<uint8_t*const>(
-				std::calloc(s, sizeof(uint8_t)))
+			data(reinterpret_cast<Type*const>(
+				std::calloc(s, sizeof(Type)))
 			),
 			size(s),
 			owner(true) { }
@@ -31,11 +32,11 @@ class BufferGuard {
 			}
 		}
 
-		operator buffer_pair() const {
+		operator buffer_pair() {
 			return std::make_pair(this->data, this->size);
 		}
 
-		uint8_t*const data;
+		Type*const data;
 		const size_t size;
 
 	private:

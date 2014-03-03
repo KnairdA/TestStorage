@@ -14,7 +14,7 @@ class MMap {
 		MMap(File*);
 		~MMap();
 
-		uint8_t* get() const;
+		BufferGuard<uint8_t> data();
 
 	private:
 		static const int ProtFlags = PROT_READ | PROT_WRITE;

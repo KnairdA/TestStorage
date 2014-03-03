@@ -21,8 +21,8 @@ class File {
 		off_t size();
 		void resize(off_t);
 
-		BufferGuard read(off_t, size_t);
-		void write(off_t, const BufferGuard::buffer_pair&);
+		BufferGuard<uint8_t> read(off_t, size_t);
+		void write(off_t, const BufferGuard<uint8_t>::buffer_pair&);
 
 		void grow(size_t);
 

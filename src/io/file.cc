@@ -35,14 +35,14 @@ void File::resize(off_t size) {
 	}
 }
 
-BufferGuard File::read(off_t offset, size_t size) {
+BufferGuard<uint8_t> File::read(off_t offset, size_t size) {
 	void* buffer = nullptr;
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,
 	                              size,
 	                              offset) >= 0 ) {
-		return BufferGuard(
+		return BufferGuard<uint8_t>(
 			reinterpret_cast<uint8_t*>(buffer),
 			readSize,
 			true
@@ -52,7 +52,7 @@ BufferGuard File::read(off_t offset, size_t size) {
 	}
 }
 
-void File::write(off_t offset, const BufferGuard::buffer_pair& data) {
+void File::write(off_t offset, const BufferGuard<uint8_t>::buffer_pair& data) {
 	if ( pwrite(this->descriptor_,
 	            reinterpret_cast<const void*>(data.first),
 	            data.second,
