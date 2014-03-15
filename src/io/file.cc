@@ -1,6 +1,17 @@
 #include "file.h"
 
-#include "exceptions.h"
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <cstddef>
+
+namespace {
+
+const int OpenFlags   = O_RDWR  | O_CREAT;
+const mode_t OpenMode = S_IRUSR | S_IWUSR;
+
+}
 
 namespace TestStorage {
 
@@ -36,7 +47,7 @@ void File::resize(off_t size) {
 }
 
 BufferGuard<uint8_t> File::read(off_t offset, size_t size) {
-	void* buffer = nullptr;
+	void* buffer{};
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,
@@ -52,7 +63,8 @@ BufferGuard<uint8_t> File::read(off_t offset, size_t size) {
 	}
 }
 
-void File::write(off_t offset, const BufferGuard<uint8_t>::buffer_pair& data) {
+template <typename Type>
+void File::write(std::ptrdiff_t offset, Type data) {
 	if ( pwrite(this->descriptor_,
 	            reinterpret_cast<const void*>(data.first),
 	            data.second,
@@ -60,6 +72,16 @@ void File::write(off_t offset, const BufferGuard<uint8_t>::buffer_pair& data) {
 		throw io_exception();
 	}
 }
+
+template void File::write<BufferGuard<uint8_t>::pointer>(
+	std::ptrdiff_t,
+	BufferGuard<uint8_t>::pointer
+);
+
+template void File::write<BufferGuard<uint8_t>::const_pointer>(
+	std::ptrdiff_t,
+	BufferGuard<uint8_t>::const_pointer
+);
 
 void File::grow(size_t space) {
 	this->resize(this->size() + space);

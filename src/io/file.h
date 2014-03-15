@@ -1,12 +1,9 @@
 #ifndef TEST_STORAGE_SRC_IO_FILE_H_
 #define TEST_STORAGE_SRC_IO_FILE_H_
 
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-
 #include <string>
 
+#include "exceptions.h"
 #include "buffer_guard.h"
 
 namespace TestStorage {
@@ -22,14 +19,14 @@ class File {
 		void resize(off_t);
 
 		BufferGuard<uint8_t> read(off_t, size_t);
-		void write(off_t, const BufferGuard<uint8_t>::buffer_pair&);
+		BufferGuard<const uint8_t> read(off_t, size_t) const;
+
+		template <typename Type>
+		void write(std::ptrdiff_t, Type);
 
 		void grow(size_t);
 
 	private:
-		static const int OpenFlags   = O_RDWR  | O_CREAT;
-		static const mode_t OpenMode = S_IRUSR | S_IWUSR;
-
 		const int descriptor_;
 
 };

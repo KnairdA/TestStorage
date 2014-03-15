@@ -2,45 +2,52 @@
 #define TEST_STORAGE_SRC_IO_BUFFER_GUARD_H_
 
 #include <tuple>
-#include <cstdint>
+#include <cstddef>
 
 namespace TestStorage {
 
 template <typename Type>
 class BufferGuard {
 	public:
-		typedef std::pair<Type*const, const size_t> buffer_pair;
+		typedef std::pair<Type*const, const std::size_t> pointer;
+		typedef std::pair<const Type*const, const std::size_t> const_pointer;
 
-		BufferGuard(Type*const d, size_t s, bool o = false):
-			data(d),
-			size(s),
-			owner(o) { }
+		BufferGuard(Type*const data, std::size_t size, bool owner = false):
+			data_(data),
+			size_(size),
+			owner_(owner) { }
 
-		BufferGuard(const buffer_pair& pair):
+		BufferGuard(const pointer& pair):
 			BufferGuard(pair.first, pair.second) { }
 
-		explicit BufferGuard(size_t s):
-			data(reinterpret_cast<Type*const>(
-				std::calloc(s, sizeof(Type)))
-			),
-			size(s),
-			owner(true) { }
+		explicit BufferGuard(std::size_t size):
+			data_(new Type[size]),
+			size_(size),
+			owner_(true) { }
 
 		~BufferGuard() {
-			if ( this->owner ) {
-				std::free(this->data);
+			if ( this->owner_ ) {
+				delete[] this->data_;
 			}
 		}
 
-		operator buffer_pair() {
-			return std::make_pair(this->data, this->size);
+		inline operator pointer() {
+			return std::make_pair(this->data_, this->size_);
 		}
 
-		Type*const data;
-		const size_t size;
+		inline operator const_pointer() const {
+			return std::make_pair(this->data_, this->size_);
+		}
+
+		inline pointer data() {
+			return this->data_;
+		}
 
 	private:
-		const bool owner;
+		Type*const data_;
+		const size_t size_;
+		const bool owner_;
+
 };
 
 }
