@@ -30,9 +30,9 @@ MMap::~MMap() {
 	munmap(this->data_, this->file_->size());
 }
 
-BufferGuard<std::uint8_t> MMap::data() {
-	return BufferGuard<std::uint8_t>(
-		reinterpret_cast<std::uint8_t*>(this->data_),
+BufferGuard MMap::data() {
+	return BufferGuard(
+		reinterpret_cast<BufferGuard::pointer>(this->data_),
 		this->file_->size()
 	);
 }

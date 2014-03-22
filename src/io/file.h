@@ -14,18 +14,16 @@ class File {
 		File(const std::string&);
 		~File();
 
+		std::size_t size() const;
+		BufferGuard read(std::ptrdiff_t, std::size_t) const;
+
 		operator int();
 
-		std::size_t size();
-		void resize(std::ptrdiff_t);
-
-		BufferGuard<std::uint8_t> read(std::ptrdiff_t, std::size_t);
-		BufferGuard<const std::uint8_t> read(std::ptrdiff_t, std::size_t) const;
+		void resize(std::size_t);
+		void grow(std::ptrdiff_t);
 
 		template <typename Type>
 		void write(std::ptrdiff_t, Type);
-
-		void grow(std::size_t);
 
 	private:
 		const int descriptor_;

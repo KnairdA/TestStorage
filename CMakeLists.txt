@@ -15,6 +15,7 @@ include_directories(
 add_executable(
 	test
 	test.cc
+	src/io/buffer_guard.cc
 	src/io/file.cc
 	src/io/mmap.cc
 )

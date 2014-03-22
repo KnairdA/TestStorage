@@ -14,7 +14,7 @@ class MMap {
 		MMap(File*);
 		~MMap();
 
-		BufferGuard<std::uint8_t> data();
+		BufferGuard data();
 
 	private:
 		File* const file_;

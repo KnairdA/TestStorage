@@ -6,45 +6,25 @@
 
 namespace TestStorage {
 
-template <typename Type>
 class BufferGuard {
 	public:
-		typedef std::pair<Type*const, const std::size_t> pointer;
-		typedef std::pair<const Type*const, const std::size_t> const_pointer;
+		typedef std::uint8_t memory_type;
+		typedef std::size_t size_type;
+		typedef memory_type* const pointer;
+		typedef const memory_type* const const_pointer;
 
-		BufferGuard(Type*const data, std::size_t size, bool owner = false):
-			data_(data),
-			size_(size),
-			owner_(owner) { }
+		BufferGuard(pointer, std::size_t, bool = false);
+		explicit BufferGuard(std::size_t);
 
-		BufferGuard(const pointer& pair):
-			BufferGuard(pair.first, pair.second) { }
+		~BufferGuard();
 
-		explicit BufferGuard(std::size_t size):
-			data_(new Type[size]),
-			size_(size),
-			owner_(true) { }
+		inline operator std::pair<pointer, const size_type>();
+		inline operator std::pair<const_pointer, const size_type>() const;
 
-		~BufferGuard() {
-			if ( this->owner_ ) {
-				delete[] this->data_;
-			}
-		}
-
-		inline operator pointer() {
-			return std::make_pair(this->data_, this->size_);
-		}
-
-		inline operator const_pointer() const {
-			return std::make_pair(this->data_, this->size_);
-		}
-
-		inline pointer data() {
-			return this->data_;
-		}
+		inline pointer data();
 
 	private:
-		Type*const data_;
+		pointer data_;
 		const std::size_t size_;
 		const bool owner_;
 
