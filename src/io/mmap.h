@@ -14,12 +14,9 @@ class MMap {
 		MMap(File*);
 		~MMap();
 
-		BufferGuard<uint8_t> data();
+		BufferGuard<std::uint8_t> data();
 
 	private:
-		static const int ProtFlags = PROT_READ | PROT_WRITE;
-		static const int MapFlags  = MAP_SHARED;
-
 		File* const file_;
 		void* data_;
 

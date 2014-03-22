@@ -45,7 +45,7 @@ class BufferGuard {
 
 	private:
 		Type*const data_;
-		const size_t size_;
+		const std::size_t size_;
 		const bool owner_;
 
 };

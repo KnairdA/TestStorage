@@ -32,7 +32,7 @@ File::operator int() {
 	return this->descriptor_;
 }
 
-off_t File::size() {
+std::size_t File::size() {
 	struct stat info;
 
 	fstat(this->descriptor_, &info);
@@ -40,21 +40,21 @@ off_t File::size() {
 	return info.st_size;
 }
 
-void File::resize(off_t size) {
+void File::resize(std::ptrdiff_t size) {
 	if ( ftruncate(this->descriptor_, size) == -1 ) {
 		throw io_exception();
 	}
 }
 
-BufferGuard<uint8_t> File::read(off_t offset, size_t size) {
+BufferGuard<std::uint8_t> File::read(std::ptrdiff_t offset, std::size_t size) {
 	void* buffer{};
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,
 	                              size,
 	                              offset) >= 0 ) {
-		return BufferGuard<uint8_t>(
-			reinterpret_cast<uint8_t*>(buffer),
+		return BufferGuard<std::uint8_t>(
+			reinterpret_cast<std::uint8_t*>(buffer),
 			readSize,
 			true
 		);
@@ -73,17 +73,17 @@ void File::write(std::ptrdiff_t offset, Type data) {
 	}
 }
 
-template void File::write<BufferGuard<uint8_t>::pointer>(
+template void File::write<BufferGuard<std::uint8_t>::pointer>(
 	std::ptrdiff_t,
-	BufferGuard<uint8_t>::pointer
+	BufferGuard<std::uint8_t>::pointer
 );
 
-template void File::write<BufferGuard<uint8_t>::const_pointer>(
+template void File::write<BufferGuard<std::uint8_t>::const_pointer>(
 	std::ptrdiff_t,
-	BufferGuard<uint8_t>::const_pointer
+	BufferGuard<std::uint8_t>::const_pointer
 );
 
-void File::grow(size_t space) {
+void File::grow(std::size_t space) {
 	this->resize(this->size() + space);
 }
 

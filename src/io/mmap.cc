@@ -2,6 +2,13 @@
 
 #include "exceptions.h"
 
+namespace {
+
+const int ProtFlags = PROT_READ | PROT_WRITE;
+const int MapFlags  = MAP_SHARED;
+
+}
+
 namespace TestStorage {
 
 MMap::MMap(File* file):
@@ -23,9 +30,9 @@ MMap::~MMap() {
 	munmap(this->data_, this->file_->size());
 }
 
-BufferGuard<uint8_t> MMap::data() {
-	return BufferGuard<uint8_t>(
-		reinterpret_cast<uint8_t*>(this->data_),
+BufferGuard<std::uint8_t> MMap::data() {
+	return BufferGuard<std::uint8_t>(
+		reinterpret_cast<std::uint8_t*>(this->data_),
 		this->file_->size()
 	);
 }
