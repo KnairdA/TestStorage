@@ -77,18 +77,14 @@ void File::write(std::ptrdiff_t offset, Type data) {
 	}
 }
 
-template void File::write<
-	std::pair<BufferGuard::pointer, const BufferGuard::size_type>
->(
-	std::ptrdiff_t,
-	std::pair<BufferGuard::pointer, const BufferGuard::size_type>
-);
+template <typename Type>
+void File::append(Type data) {
+	const std::ptrdiff_t size(this->size());
 
-template void File::write<
-	std::pair<BufferGuard::const_pointer, const BufferGuard::size_type>
->(
-	std::ptrdiff_t,
-	std::pair<BufferGuard::const_pointer, const BufferGuard::size_type>
-);
+	this->grow(data.second);
+	this->write(size, data);
+}
 
 }
+
+#include "file.tmpl"

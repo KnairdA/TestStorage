@@ -25,6 +25,9 @@ class File {
 		template <typename Type>
 		void write(std::ptrdiff_t, Type);
 
+		template <typename Type>
+		void append(Type);
+
 	private:
 		const int descriptor_;
 
