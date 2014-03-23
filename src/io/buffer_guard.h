@@ -18,10 +18,11 @@ class BufferGuard {
 
 		~BufferGuard();
 
-		inline operator std::pair<pointer, const size_type>();
-		inline operator std::pair<const_pointer, const size_type>() const;
+		operator std::pair<pointer, const size_type>();
+		operator std::pair<const_pointer, const size_type>() const;
 
-		inline pointer data();
+		pointer data();
+		size_type size() const;
 
 	private:
 		pointer data_;
