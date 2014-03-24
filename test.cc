@@ -1,13 +1,18 @@
 #include "io/file.h"
 
-#include "block/block_storage.h"
+#include "storage/storage.h"
 
 #include <iostream>
 
 int main() {
-	TestStorage::BlockStorage<32> blocks32("./storage/32");
+	TestStorage::Storage<
+		BinaryMapping::PlainTuple<
+			std::uint32_t,
+			BinaryMapping::ByteField<32>
+		>
+	> storage("./storage/test");
 
-	blocks32.add(10000);
+	auto test(storage.add());
 
-	std::cout << blocks32.size();
+	test->set<0>(42);
 }
