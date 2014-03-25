@@ -41,12 +41,12 @@ std::size_t File::size() const {
 }
 
 BufferGuard File::read(std::ptrdiff_t offset, std::size_t size) const {
-	void* buffer{};
+	void* buffer(new std::uint8_t[size]);
 
 	if ( ssize_t readSize = pread(this->descriptor_,
 	                              buffer,
 	                              size,
-	                              offset) >= 0 ) {
+	                              offset) == size ) {
 		return BufferGuard(
 			reinterpret_cast<BufferGuard::pointer>(buffer),
 			readSize,

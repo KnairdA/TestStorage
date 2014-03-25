@@ -6,6 +6,8 @@
 
 #include "BinaryMapping/src/container.h"
 
+#include <stdexcept>
+
 namespace TestStorage {
 
 template <typename Type>
@@ -16,14 +18,23 @@ class Storage {
 		Storage(const std::string& path):
 			file_(path) { }
 
+		std::size_t size() const {
+			return this->file_.size() / element_type::size;
+		}
+
 		BufferedStructureGuard<element_type> at(std::size_t index) {
-			if ( (index+1) * element_type::size  <= this->file_.size() ) {
-				return BufferedStructureGuard<element_type>(&this->file_, index);
+			if ( index < this->size() ) {
+				return BufferedStructureGuard<element_type>(
+					&this->file_,
+					index
+				);
+			} else {
+				throw std::out_of_range("range_violated");
 			}
 		}
 
 		BufferedStructureGuard<element_type> add() {
-			const std::size_t index(this->file_.size() / element_type::size);
+			const std::size_t index(this->size());
 
 			this->file_.grow(element_type::size);
 

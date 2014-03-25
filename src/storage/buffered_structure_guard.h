@@ -21,7 +21,7 @@ class BufferedStructureGuard {
 					BufferGuard::const_pointer,
 					const BufferGuard::size_type
 				>
-			>(this->index_, this->buffer_);
+			>(this->offset_, this->buffer_);
 		}
 
 		typename std::add_pointer<element_type>::type operator->() {
@@ -32,13 +32,13 @@ class BufferedStructureGuard {
 		friend Storage<Type>;
 
 		BufferedStructureGuard(File* file, std::ptrdiff_t index):
-			index_(index),
+			offset_(index * element_type::size),
 			file_(file),
-			buffer_(file->read(index * element_type::size, element_type::size)),
+			buffer_(file->read(offset_, element_type::size)),
 			structure_(buffer_.data()) { }
 
 	private:
-		const std::ptrdiff_t index_;
+		const std::ptrdiff_t offset_;
 
 		File* const file_;
 		BufferGuard buffer_;
