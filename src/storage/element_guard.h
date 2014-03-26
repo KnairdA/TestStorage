@@ -1,5 +1,5 @@
-#ifndef TEST_STORAGE_SRC_STORAGE_BUFFERED_STRUCTURE_GUARD_H_
-#define TEST_STORAGE_SRC_STORAGE_BUFFERED_STRUCTURE_GUARD_H_
+#ifndef TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_
+#define TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_
 
 #include <utility>
 
@@ -8,14 +8,14 @@
 
 namespace TestStorage {
 
-template <typename> class Storage;
-
 template <typename Type>
-class BufferedStructureGuard {
+class Storage<Type>::element_guard {
+	friend Storage<Type>;
+
 	public:
 		typedef Type element_type;
 
-		~BufferedStructureGuard() {
+		~element_guard() {
 			this->file_->template write<
 				std::pair<
 					BufferGuard::const_pointer,
@@ -29,9 +29,7 @@ class BufferedStructureGuard {
 		}
 
 	protected:
-		friend Storage<Type>;
-
-		BufferedStructureGuard(File* file, std::ptrdiff_t index):
+		element_guard(File* file, std::ptrdiff_t index):
 			offset_(index * element_type::size),
 			file_(file),
 			buffer_(file->read(offset_, element_type::size)),
@@ -48,4 +46,4 @@ class BufferedStructureGuard {
 
 }
 
-#endif  // TEST_STORAGE_SRC_STORAGE_BUFFERED_STRUCTURE_GUARD_H_
+#endif  // TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_

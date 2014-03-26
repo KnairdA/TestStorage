@@ -2,7 +2,6 @@
 #define TEST_STORAGE_SRC_STORAGE_STORAGE_H_
 
 #include "io/file.h"
-#include "buffered_structure_guard.h"
 
 #include "BinaryMapping/src/container.h"
 
@@ -15,6 +14,8 @@ class Storage {
 	public:
 		typedef Type element_type;
 
+		class element_guard;
+
 		Storage(const std::string& path):
 			file_(path) { }
 
@@ -22,9 +23,9 @@ class Storage {
 			return this->file_.size() / element_type::size;
 		}
 
-		BufferedStructureGuard<element_type> at(std::size_t index) {
+		element_guard at(std::size_t index) {
 			if ( index < this->size() ) {
-				return BufferedStructureGuard<element_type>(
+				return element_guard(
 					&this->file_,
 					index
 				);
@@ -33,7 +34,7 @@ class Storage {
 			}
 		}
 
-		BufferedStructureGuard<element_type> add() {
+		element_guard add() {
 			const std::size_t index(this->size());
 
 			this->file_.grow(element_type::size);
@@ -47,5 +48,7 @@ class Storage {
 };
 
 }
+
+#include "element_guard.h"
 
 #endif  // TEST_STORAGE_SRC_STORAGE_STORAGE_H_
