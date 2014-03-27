@@ -26,8 +26,24 @@ class Storage {
 		element_guard at(std::size_t index) {
 			if ( index < this->size() ) {
 				return element_guard(
-					&this->file_,
+					this->file_,
 					index
+				);
+			} else {
+				throw std::out_of_range("range_violated");
+			}
+		}
+
+		void reset(std::size_t index) {
+			if ( index < this->size() ) {
+				this->file_.template write<
+					std::pair<
+						BufferGuard::const_pointer,
+						const BufferGuard::size_type
+					>
+				>(
+					index * element_type::size,
+					BufferGuard(element_type::size)
 				);
 			} else {
 				throw std::out_of_range("range_violated");

@@ -16,7 +16,7 @@ class Storage<Type>::element_guard {
 		typedef Type element_type;
 
 		~element_guard() {
-			this->file_->template write<
+			this->file_.template write<
 				std::pair<
 					BufferGuard::const_pointer,
 					const BufferGuard::size_type
@@ -25,22 +25,22 @@ class Storage<Type>::element_guard {
 		}
 
 		typename std::add_pointer<element_type>::type operator->() {
-			return &this->structure_;
+			return &this->element_;
 		}
 
 	protected:
-		element_guard(File* file, std::ptrdiff_t index):
+		element_guard(File& file, std::ptrdiff_t index):
 			offset_(index * element_type::size),
 			file_(file),
-			buffer_(file->read(offset_, element_type::size)),
-			structure_(buffer_.data()) { }
+			buffer_(file.read(offset_, element_type::size)),
+			element_(buffer_.data()) { }
 
 	private:
 		const std::ptrdiff_t offset_;
 
-		File* const file_;
+		File& file_;
 		BufferGuard buffer_;
-		Type structure_;
+		Type element_;
 
 };
 
