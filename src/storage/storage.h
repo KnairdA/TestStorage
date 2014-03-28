@@ -9,22 +9,32 @@ namespace TestStorage {
 
 template <typename Type>
 class Storage {
-	public:
-		typedef typename Type::template type<std::uint8_t> element_type;
+	template <typename> class element_guard;
 
-		template <typename> class element_guard;
+	typedef typename Type::template type<
+		BufferGuard::memory_type
+	> element_type;
+
+	typedef typename Type::template type<
+		const BufferGuard::memory_type
+	> const_element_type;
+
+	public:
+		typedef std::size_t size_type;
+		typedef element_guard<BufferGuard::memory_type> element;
+		typedef element_guard<const BufferGuard::memory_type> const_element;
 
 		Storage(const std::string& path):
 			file_(path) { }
 
-		std::size_t size() const {
+		size_type size() const {
 			return this->file_.size() / element_type::size;
 		}
 
-		element_guard<std::uint8_t> at(std::size_t index) {
+		const_element at(size_type index) const {
 			if ( index < this->size() ) {
-				return element_guard<std::uint8_t>(
-					this->file_,
+				return const_element(
+					&this->file_,
 					index
 				);
 			} else {
@@ -32,7 +42,26 @@ class Storage {
 			}
 		}
 
-		void reset(std::size_t index) {
+		element at(size_type index) {
+			if ( index < this->size() ) {
+				return element(
+					&this->file_,
+					index
+				);
+			} else {
+				throw std::out_of_range("range_violated");
+			}
+		}
+
+		element add() {
+			const size_type index(this->size());
+
+			this->file_.grow(element_type::size);
+
+			return this->at(index);
+		}
+
+		void reset(size_type index) {
 			if ( index < this->size() ) {
 				this->file_.template write<
 					std::pair<
@@ -46,14 +75,6 @@ class Storage {
 			} else {
 				throw std::out_of_range("range_violated");
 			}
-		}
-
-		element_guard<std::uint8_t> add() {
-			const std::size_t index(this->size());
-
-			this->file_.grow(element_type::size);
-
-			return this->at(index);
 		}
 
 	private:

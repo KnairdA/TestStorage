@@ -17,12 +17,14 @@ class Storage<Type>::element_guard {
 		typedef typename Type::template type<Base> element_type;
 
 		~element_guard() {
-			this->file_.template write<
-				std::pair<
-					BufferGuard::const_pointer,
-					const BufferGuard::size_type
-				>
-			>(this->offset_, this->buffer_);
+			if ( this->file_ != nullptr ) {
+				this->file_->template write<
+					std::pair<
+						BufferGuard::const_pointer,
+						const BufferGuard::size_type
+					>
+				>(this->offset_, this->buffer_);
+			}
 		}
 
 		typename std::add_pointer<element_type>::type operator->() {
@@ -30,16 +32,32 @@ class Storage<Type>::element_guard {
 		}
 
 	protected:
-		element_guard(File& file, std::ptrdiff_t index):
+		element_guard(File* file, std::ptrdiff_t index):
 			offset_(index * element_type::size),
 			file_(file),
-			buffer_(file.read(offset_, element_type::size)),
-			element_(buffer_.data()) { }
+			buffer_(file->read(offset_, element_type::size)),
+			element_(buffer_.data()) {
+			static_assert(
+				!std::is_const<Base>::value,
+				"This constructor is only valid for non-const base types"
+			);
+		}
+
+		element_guard(const File* file, std::ptrdiff_t index):
+			offset_(index * element_type::size),
+			file_(nullptr),
+			buffer_(file->read(offset_, element_type::size)),
+			element_(buffer_.data()) {
+			static_assert(
+				std::is_const<Base>::value,
+				"This constructor is only valid for const base types"
+			);
+		}
 
 	private:
 		const std::ptrdiff_t offset_;
 
-		File& file_;
+		File* const file_;
 		BufferGuard buffer_;
 		element_type element_;
 

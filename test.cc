@@ -7,14 +7,16 @@
 #include <iostream>
 
 int main() {
-	TestStorage::Storage<
+	typedef TestStorage::Storage<
 		BinaryMapping::PlainTuple<
 			std::uint32_t,
 			BinaryMapping::ByteField<32>
 		>
-	> storage("./storage/test");
+	> StorageType;
+	
+	StorageType storage("./storage/test");
 
-	auto test(storage.add());
+	StorageType::element test(storage.add());
 
 	test->set<0>(42);
 }
