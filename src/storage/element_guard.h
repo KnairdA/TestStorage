@@ -9,11 +9,12 @@
 namespace TestStorage {
 
 template <typename Type>
+template <typename Base>
 class Storage<Type>::element_guard {
 	friend Storage<Type>;
 
 	public:
-		typedef Type element_type;
+		typedef typename Type::template type<Base> element_type;
 
 		~element_guard() {
 			this->file_.template write<
@@ -40,7 +41,7 @@ class Storage<Type>::element_guard {
 
 		File& file_;
 		BufferGuard buffer_;
-		Type element_;
+		element_type element_;
 
 };
 

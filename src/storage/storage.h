@@ -3,8 +3,6 @@
 
 #include "io/file.h"
 
-#include "BinaryMapping/src/container.h"
-
 #include <stdexcept>
 
 namespace TestStorage {
@@ -12,9 +10,9 @@ namespace TestStorage {
 template <typename Type>
 class Storage {
 	public:
-		typedef Type element_type;
+		typedef typename Type::template type<std::uint8_t> element_type;
 
-		class element_guard;
+		template <typename> class element_guard;
 
 		Storage(const std::string& path):
 			file_(path) { }
@@ -23,9 +21,9 @@ class Storage {
 			return this->file_.size() / element_type::size;
 		}
 
-		element_guard at(std::size_t index) {
+		element_guard<std::uint8_t> at(std::size_t index) {
 			if ( index < this->size() ) {
-				return element_guard(
+				return element_guard<std::uint8_t>(
 					this->file_,
 					index
 				);
@@ -50,7 +48,7 @@ class Storage {
 			}
 		}
 
-		element_guard add() {
+		element_guard<std::uint8_t> add() {
 			const std::size_t index(this->size());
 
 			this->file_.grow(element_type::size);
