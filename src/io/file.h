@@ -10,12 +10,20 @@
 namespace TestStorage {
 
 class File {
+	template <typename> class buffered_slice;
+
 	public:
+		typedef buffered_slice<BufferGuard::memory_type> buffered_type;
+		typedef buffered_slice<const BufferGuard::memory_type> const_buffered_type;
+
 		File(const std::string&);
 		~File();
 
 		std::size_t size() const;
 		BufferGuard read(std::ptrdiff_t, std::size_t) const;
+
+		buffered_type mirror(std::ptrdiff_t, std::size_t);
+		const_buffered_type mirror(std::ptrdiff_t, std::size_t) const;
 
 		operator int();
 
@@ -34,5 +42,7 @@ class File {
 };
 
 }
+
+#include "buffered_slice.h"
 
 #endif  // TEST_STORAGE_SRC_IO_FILE_H_

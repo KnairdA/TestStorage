@@ -57,6 +57,22 @@ BufferGuard File::read(std::ptrdiff_t offset, std::size_t size) const {
 	}
 }
 
+auto File::mirror(std::ptrdiff_t offset, std::size_t size) -> buffered_type {
+	return buffered_type(
+		this,
+		offset,
+		size
+	);
+}
+
+auto File::mirror(std::ptrdiff_t offset, std::size_t size) const -> const_buffered_type {
+	return const_buffered_type(
+		this,
+		offset,
+		size
+	);
+}
+
 void File::resize(std::size_t size) {
 	if ( ftruncate(this->descriptor_, size) == -1 ) {
 		throw io_exception();
