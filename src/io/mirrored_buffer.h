@@ -12,12 +12,7 @@ class File::mirrored_buffer {
 	public:
 		~mirrored_buffer() {
 			if ( this->file_ != nullptr ) {
-				this->file_->template write<
-					std::pair<
-						BufferGuard::const_pointer,
-						const BufferGuard::size_type
-					>
-				>(this->offset_, this->buffer_);
+				this->file_->write(this->offset_, this->buffer_);
 			}
 		}
 

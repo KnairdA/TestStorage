@@ -30,6 +30,10 @@ auto BufferGuard::data() -> pointer {
 	return this->data_;
 }
 
+auto BufferGuard::data() const -> const_pointer {
+	return this->data_;
+}
+
 auto BufferGuard::size() const -> size_type {
 	return this->size_;
 }

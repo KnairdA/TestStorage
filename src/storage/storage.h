@@ -63,12 +63,7 @@ class Storage {
 
 		void reset(size_type index) {
 			if ( index < this->size() ) {
-				this->file_.template write<
-					std::pair<
-						BufferGuard::const_pointer,
-						const BufferGuard::size_type
-					>
-				>(
+				this->file_.write(
 					index * element_type::size,
 					BufferGuard(element_type::size)
 				);

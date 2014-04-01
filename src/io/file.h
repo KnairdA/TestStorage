@@ -30,11 +30,8 @@ class File {
 		void resize(std::size_t);
 		void grow(std::ptrdiff_t);
 
-		template <typename Type>
-		void write(std::ptrdiff_t, Type);
-
-		template <typename Type>
-		void append(Type);
+		void write(std::ptrdiff_t, const BufferGuard&);
+		void append(const BufferGuard&);
 
 	private:
 		const int descriptor_;

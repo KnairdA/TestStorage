@@ -83,24 +83,20 @@ void File::grow(std::ptrdiff_t offset) {
 	this->resize(this->size() + offset);
 }
 
-template <typename Type>
-void File::write(std::ptrdiff_t offset, Type data) {
+void File::write(std::ptrdiff_t offset, const BufferGuard& data) {
 	if ( pwrite(this->descriptor_,
-	            reinterpret_cast<const void*>(data.first),
-	            data.second,
+	            reinterpret_cast<const void*>(data.data()),
+	            data.size(),
 	            offset) < 0 ) {
 		throw io_exception();
 	}
 }
 
-template <typename Type>
-void File::append(Type data) {
-	const std::ptrdiff_t size(this->size());
+void File::append(const BufferGuard& data) {
+	const std::ptrdiff_t offset(this->size());
 
-	this->grow(data.second);
-	this->write(size, data);
+	this->grow(data.size());
+	this->write(offset, data);
 }
 
 }
-
-#include "file.tmpl"
