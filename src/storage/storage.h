@@ -9,7 +9,7 @@ namespace TestStorage {
 
 template <typename Type>
 class Storage {
-	template <typename> class element_guard;
+	template <typename> class element_reference;
 
 	typedef typename Type::template type<
 		BufferGuard::memory_type
@@ -21,8 +21,8 @@ class Storage {
 
 	public:
 		typedef std::size_t size_type;
-		typedef element_guard<BufferGuard::memory_type> element;
-		typedef element_guard<const BufferGuard::memory_type> const_element;
+		typedef element_reference<BufferGuard::memory_type> element;
+		typedef element_reference<const BufferGuard::memory_type> const_element;
 
 		Storage(const std::string& path):
 			file_(path) { }
@@ -79,6 +79,6 @@ class Storage {
 
 }
 
-#include "element_guard.h"
+#include "element_reference.h"
 
 #endif  // TEST_STORAGE_SRC_STORAGE_STORAGE_H_

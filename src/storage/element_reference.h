@@ -1,5 +1,5 @@
-#ifndef TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_
-#define TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_
+#ifndef TEST_STORAGE_SRC_STORAGE_ELEMENT_REFERENCE_H_
+#define TEST_STORAGE_SRC_STORAGE_ELEMENT_REFERENCE_H_
 
 #include <utility>
 
@@ -9,7 +9,7 @@ namespace TestStorage {
 
 template <typename Type>
 template <typename Base>
-class Storage<Type>::element_guard {
+class Storage<Type>::element_reference {
 	friend Storage<Type>;
 
 	public:
@@ -20,7 +20,7 @@ class Storage<Type>::element_guard {
 		}
 
 	protected:
-		element_guard(File* file, std::ptrdiff_t index):
+		element_reference(File* file, std::ptrdiff_t index):
 			buffer_(
 				file->mirror(index * element_type::size, element_type::size)
 			),
@@ -31,7 +31,7 @@ class Storage<Type>::element_guard {
 			);
 		}
 
-		element_guard(const File* file, std::ptrdiff_t index):
+		element_reference(const File* file, std::ptrdiff_t index):
 			buffer_(
 				file->mirror(index * element_type::size, element_type::size)
 			),
@@ -55,4 +55,4 @@ class Storage<Type>::element_guard {
 
 }
 
-#endif  // TEST_STORAGE_SRC_STORAGE_ELEMENT_GUARD_H_
+#endif  // TEST_STORAGE_SRC_STORAGE_ELEMENT_REFERENCE_H_
