@@ -1,16 +1,16 @@
-#ifndef TEST_STORAGE_SRC_IO_BUFFERED_SLICE_H_
-#define TEST_STORAGE_SRC_IO_BUFFERED_SLICE_H_
+#ifndef TEST_STORAGE_SRC_IO_MIRRORED_BUFFER_H_
+#define TEST_STORAGE_SRC_IO_MIRRORED_BUFFER_H_
 
 #include "io/file.h"
 
 namespace TestStorage {
 
 template <typename Base>
-class File::buffered_slice {
+class File::mirrored_buffer {
 	friend File;
 
 	public:
-		~buffered_slice() {
+		~mirrored_buffer() {
 			if ( this->file_ != nullptr ) {
 				this->file_->template write<
 					std::pair<
@@ -26,7 +26,7 @@ class File::buffered_slice {
 		}
 
 	protected:
-		buffered_slice(File* file, std::ptrdiff_t offset, std::size_t size):
+		mirrored_buffer(File* file, std::ptrdiff_t offset, std::size_t size):
 			offset_(offset),
 			size_(size),
 			file_(file),
@@ -37,7 +37,7 @@ class File::buffered_slice {
 			);
 		}
 
-		buffered_slice(const File* file, std::ptrdiff_t offset, std::size_t size):
+		mirrored_buffer(const File* file, std::ptrdiff_t offset, std::size_t size):
 			offset_(offset),
 			size_(size),
 			file_(nullptr),
@@ -59,4 +59,4 @@ class File::buffered_slice {
 
 }
 
-#endif  // TEST_STORAGE_SRC_IO_BUFFERED_SLICE_H_
+#endif  // TEST_STORAGE_SRC_IO_MIRRORED_BUFFER_H_

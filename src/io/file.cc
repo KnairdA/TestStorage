@@ -57,16 +57,16 @@ BufferGuard File::read(std::ptrdiff_t offset, std::size_t size) const {
 	}
 }
 
-auto File::mirror(std::ptrdiff_t offset, std::size_t size) -> buffered_type {
-	return buffered_type(
+auto File::mirror(std::ptrdiff_t offset, std::size_t size) -> mirror_type {
+	return mirror_type(
 		this,
 		offset,
 		size
 	);
 }
 
-auto File::mirror(std::ptrdiff_t offset, std::size_t size) const -> const_buffered_type {
-	return const_buffered_type(
+auto File::mirror(std::ptrdiff_t offset, std::size_t size) const -> const_mirror_type {
+	return const_mirror_type(
 		this,
 		offset,
 		size

@@ -21,10 +21,10 @@ class Storage<Type>::element_guard {
 
 	protected:
 		element_guard(File* file, std::ptrdiff_t index):
-			slice_(
+			buffer_(
 				file->mirror(index * element_type::size, element_type::size)
 			),
-			element_(slice_->data()) {
+			element_(buffer_->data()) {
 			static_assert(
 				!std::is_const<Base>::value,
 				"This constructor is only valid for non-const base types"
@@ -32,10 +32,10 @@ class Storage<Type>::element_guard {
 		}
 
 		element_guard(const File* file, std::ptrdiff_t index):
-			slice_(
+			buffer_(
 				file->mirror(index * element_type::size, element_type::size)
 			),
-			element_(slice_->data()) {
+			element_(buffer_->data()) {
 			static_assert(
 				std::is_const<Base>::value,
 				"This constructor is only valid for const base types"
@@ -45,9 +45,9 @@ class Storage<Type>::element_guard {
 	private:
 		typename std::conditional<
 			std::is_const<Base>::value,
-			File::const_buffered_type,
-			File::buffered_type
-		>::type slice_;
+			File::const_mirror_type,
+			File::mirror_type
+		>::type buffer_;
 
 		element_type element_;
 
