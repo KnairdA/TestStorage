@@ -57,6 +57,18 @@ class Storage {
 			}
 		}
 
+		container at(size_type index, size_type count) {
+			if ( index + count <= this->size() ) {
+				return container(
+					&this->file_,
+					index,
+					count
+				);
+			} else {
+				throw std::out_of_range("range_violated");
+			}
+		}
+
 		element add() {
 			const size_type index(this->size());
 
