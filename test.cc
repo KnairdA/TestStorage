@@ -16,15 +16,11 @@ int main() {
 	
 	StorageType storage("./storage/test");
 
-	StorageType::container area(storage.at(5, 10));
+	StorageType::container test(storage.add(4));
 
-	for ( auto iter(area->begin());
-	      iter != area->end();
+	for ( auto iter(test->begin());
+	      iter != test->end();
 	      ++iter ) {
-		(*iter).set<0>(84);
+		(*iter).set<0>(42);
 	}
-
-	StorageType::element test(storage.add());
-
-	test->set<0>(42);
 }

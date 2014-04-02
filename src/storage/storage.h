@@ -77,6 +77,14 @@ class Storage {
 			return this->at(index);
 		}
 
+		container add(size_type count) {
+			const size_type index(this->size());
+
+			this->file_.grow(count * element_type::size);
+
+			return this->at(index, count);
+		}
+
 		void reset(size_type index) {
 			if ( index < this->size() ) {
 				this->file_.write(
