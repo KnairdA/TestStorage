@@ -29,6 +29,7 @@ class File {
 
 		void resize(std::size_t);
 		void grow(std::ptrdiff_t);
+		void shrink(std::ptrdiff_t);
 
 		void write(std::ptrdiff_t, const BufferGuard&);
 		void append(const BufferGuard&);

@@ -96,6 +96,14 @@ class Storage {
 			}
 		}
 
+		void pop_back() {
+			if ( this->size() >= 1 ) {
+				this->file_.shrink(element_type::size);
+			} else {
+				throw std::out_of_range("range_violated");
+			}
+		}
+
 	private:
 		File file_;
 

@@ -83,6 +83,10 @@ void File::grow(std::ptrdiff_t offset) {
 	this->resize(this->size() + offset);
 }
 
+void File::shrink(std::ptrdiff_t offset) {
+	this->resize(this->size() - offset);
+}
+
 void File::write(std::ptrdiff_t offset, const BufferGuard& data) {
 	if ( pwrite(this->descriptor_,
 	            reinterpret_cast<const void*>(data.data()),
