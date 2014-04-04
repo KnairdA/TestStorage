@@ -23,9 +23,8 @@ class File::mirrored_buffer {
 	protected:
 		mirrored_buffer(File* file, std::ptrdiff_t offset, std::size_t size):
 			offset_(offset),
-			size_(size),
 			file_(file),
-			buffer_(file->read(offset_, size_)) {
+			buffer_(file->read(offset_, size)) {
 			static_assert(
 				!std::is_const<Base>::value,
 				"This constructor is only valid for non-const base types"
@@ -34,9 +33,8 @@ class File::mirrored_buffer {
 
 		mirrored_buffer(const File* file, std::ptrdiff_t offset, std::size_t size):
 			offset_(offset),
-			size_(size),
 			file_(nullptr),
-			buffer_(file->read(offset_, size_)) {
+			buffer_(file->read(offset_, size)) {
 			static_assert(
 				std::is_const<Base>::value,
 				"This constructor is only valid for const base types"
@@ -45,7 +43,6 @@ class File::mirrored_buffer {
 
 	private:
 		const std::ptrdiff_t offset_;
-		const std::size_t size_;
 
 		File* const file_;
 		BufferGuard buffer_;
