@@ -11,9 +11,12 @@ namespace TestStorage {
 
 class File {
 	template <typename> class mirrored_buffer;
+	template <typename> class mapped_buffer;
 
 	public:
 		typedef mirrored_buffer<BufferGuard::memory_type> mirror_type;
+		typedef mapped_buffer<BufferGuard::memory_type> mapped_type;
+
 		typedef mirrored_buffer<const BufferGuard::memory_type> const_mirror_type;
 
 		File(const std::string&);
@@ -42,5 +45,6 @@ class File {
 }
 
 #include "mirrored_buffer.h"
+#include "mapped_buffer.h"
 
 #endif  // TEST_STORAGE_SRC_IO_FILE_H_

@@ -18,9 +18,6 @@ class BufferGuard {
 
 		~BufferGuard();
 
-		operator std::pair<pointer, const size_type>();
-		operator std::pair<const_pointer, const size_type>() const;
-
 		pointer data();
 		const_pointer data() const;
 		size_type size() const;

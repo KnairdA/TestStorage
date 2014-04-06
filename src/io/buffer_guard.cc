@@ -18,14 +18,6 @@ BufferGuard::~BufferGuard() {
 	}
 }
 
-BufferGuard::operator std::pair<pointer, const size_type>() {
-	return std::make_pair(this->data_, this->size_);
-}
-
-BufferGuard::operator std::pair<const_pointer, const size_type>() const {
-	return std::make_pair(this->data_, this->size_);
-}
-
 auto BufferGuard::data() -> pointer {
 	return this->data_;
 }

@@ -17,5 +17,4 @@ add_executable(
 	test.cc
 	src/io/buffer_guard.cc
 	src/io/file.cc
-	src/io/mmap.cc
 )
