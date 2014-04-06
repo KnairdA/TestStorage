@@ -30,15 +30,15 @@ class File::mapped_buffer {
 		mapped_buffer(File* file, std::ptrdiff_t offset, std::size_t size):
 			size_(size),
 			file_(file),
-			data_(mmap(
+			data_(reinterpret_cast<BufferGuard::pointer>(mmap(
 				nullptr,
 				size_,
 				ProtFlags,
 				MapFlags,
 				*file, 
 				offset
-			)),
-			buffer_(data_) {
+			))),
+			buffer_(data_, size_) {
 			static_assert(
 				!std::is_const<Base>::value,
 				"This constructor is only valid for non-const base types"

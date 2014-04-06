@@ -73,6 +73,14 @@ auto File::mirror(std::ptrdiff_t offset, std::size_t size) const -> const_mirror
 	);
 }
 
+auto File::map(std::ptrdiff_t offset, std::size_t size) -> mapped_type {
+	return mapped_type(
+		this,
+		offset,
+		size
+	);
+}
+
 void File::resize(std::size_t size) {
 	if ( ftruncate(this->descriptor_, size) == -1 ) {
 		throw io_exception();

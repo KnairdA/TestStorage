@@ -28,6 +28,8 @@ class File {
 		mirror_type mirror(std::ptrdiff_t, std::size_t);
 		const_mirror_type mirror(std::ptrdiff_t, std::size_t) const;
 
+		mapped_type map(std::ptrdiff_t, std::size_t);
+
 		operator int();
 
 		void resize(std::size_t);
