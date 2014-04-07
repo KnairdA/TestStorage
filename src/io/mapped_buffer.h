@@ -2,12 +2,15 @@
 #define TEST_STORAGE_SRC_IO_MAPPED_BUFFER_H_
 
 #include "io/file.h"
+
 #include <sys/mman.h>
+#include <unistd.h>
 
 namespace {
 
 const int ProtFlags = PROT_READ | PROT_WRITE;
 const int MapFlags  = MAP_SHARED;
+const long PageSize = sysconf(_SC_PAGE_SIZE);
 
 }
 
@@ -44,7 +47,8 @@ class File::mapped_buffer {
 				"This constructor is only valid for non-const base types"
 			);
 
-			if ( this->data_ == reinterpret_cast<void*>(-1) ) {
+			if ( this->data_       == reinterpret_cast<void*>(-1) ||
+			     offset % PageSize != 0 ) {
 				throw io_exception();
 			}
 		}
